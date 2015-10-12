@@ -10,3 +10,7 @@ Functional clone of the IS31IO7326 using an ATtiny48
 3. `make`
 
 `make flash` is configured to use [USBtinyISP](https://learn.adafruit.com/usbtinyisp). To use a different programmer, change `PROGRAMMER` in `firmware/Makefile`
+
+## Porting to different hardware
+
+It's possible to configure this project for different AVRs. Check out [`config/attiny48.h`](https://github.com/numist/is31io7326_clone/blob/master/firmware/config/attiny48.h) to get familiar with the required definitions and application considerations.
