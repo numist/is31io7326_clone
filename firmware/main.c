@@ -62,6 +62,7 @@ void twi_handle_event(void)
             if (TWI_statusReg.RxDataInBuf) {
                 TWI_Get_Data_From_Transceiver(messageBuf, 1);         
 
+                // TODO: define for KSR
                 // 0x10 Read Key Status Register
                 if (messageBuf[0] == 0x10)
                 {
@@ -69,6 +70,8 @@ void twi_handle_event(void)
                     TWI_Start_Transceiver_With_Data( messageBuf, 1);
                     // TODO: INT pin
                 }
+                // TODO: respond to config read with 0x00 for now
+                // TODO: at least pretend to ignore config writes
             } else {
                 // Ends up here if the last operation was a transmission
             }
