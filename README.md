@@ -8,8 +8,7 @@ Functional clone of the IS31IO7326 using an ATtiny48
 1. Install an avr toolchain (if you're on OS X, try [CrossPack for AVR®](https://www.obdev.at/products/crosspack/))
 2. `cd firmware`
 3. `make`
-
-`make flash` is configured to use [USBtinyISP](https://learn.adafruit.com/usbtinyisp). To use a different programmer, change `PROGRAMMER` in `firmware/Makefile`
+4. `make flash` and `make fuse` as necessary to program your MCU
 
 ## Porting to different hardware
 
