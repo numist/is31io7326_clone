@@ -12,8 +12,8 @@
 #                uploading to the AVR and the interface where this hardware
 #                is connected. We recommend that you leave it undefined and
 #                add settings like this to your ~/.avrduderc file:
-#                   default_programmer = "stk500v2"
-#                   default_serial = "avrdoper"
+#                   default_programmer = "dragon_isp";
+#                   default_serial = "usb";
 # FUSES ........ Parameters for avrdude to flash the fuses appropriately.
 
 # See avr-help for all possible devices
@@ -22,8 +22,9 @@ DEVICE     = attiny48
 # 8Mhz
 CLOCK      = 8000000
 
-# Using Adafruit USBtiny
-PROGRAMMER = -c usbtiny -P usb
+# Uncomment one of these (or create your own) if you haven't yet set up ~/.avrduderc with a default programmer.
+# PROGRAMMER = -c usbtiny -P usb
+# PROGRAMMER = -c dragon_isp -P usb
 
 # Add more objects for each .c file here
 OBJECTS    = main.o twi-slave.o ringbuf.o
