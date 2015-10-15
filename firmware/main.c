@@ -87,11 +87,11 @@ void twi_handle_event(void)
 
 static inline void setup(void)
 {
-    DDR_PP = 0xFF;
-    PIN_PP = 0xFF;
+    DDR_PP = 0x00;
+    PORT_PP = 0xFF;
     
     DDR_OD = 0x00;
-    PIN_OD = 0xFF;
+    PORT_OD = 0xFF;
 
     // TODO: AD01
     TWI_Slave_Initialise(TWI_BASE_ADDRESS << TWI_ADR_BITS);
@@ -103,7 +103,9 @@ static inline void setup(void)
 static inline void loop(void)
 {
     for (uint8_t pp = 0; pp < 8; ++pp) {
-        PIN_PP = 0xFF ^ (1 << pp);
+        uint8_t bitmask = (1 << pp);
+        DDR_PP = 0x00 ^ bitmask;
+        PORT_PP = 0xFF ^ bitmask;
         
         _delay_us(0.5);
         
