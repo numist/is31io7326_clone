@@ -10,6 +10,28 @@ Functional clone of the IS31IO7326 using an ATtiny48
 3. `make`
 4. `make flash` and `make fuse` as necessary to program your MCU
 
+### Common issues:
+
+---
+
+`avrdude: no programmer has been specified on the command line or the config file`
+
+`avrdude` needs to know what kind of programmer you're using. You can uncomment/edit one of the `PROGRAMMER` lines in `firmware/Makefile`, or add a `default_programmer` directive to your `~/.avrduderc`.
+
+For more information, check out [`firmware/Makefile`](firmware/Makefile).
+
+---
+
+`avrdude: AVR Part "attiny48" not found.`
+
+`avrdude` can't find a part config for the attiny48. You can resolve this by appending [`doc/attiny48.avrduderc`](doc/attiny48.avrduderc) to `~/.avrduderc`:
+
+```
+cat doc/attiny48.avrduderc >> ~/.avrduderc
+```
+
+---
+
 ## Porting to different hardware
 
-It's possible to configure this project for different AVRs. Check out [`config/attiny48.h`](https://github.com/numist/is31io7326_clone/blob/master/firmware/config/attiny48.h) to get familiar with the required definitions and application considerations.
+It's possible to configure this project for different AVRs. Check out [`config/attiny48.h`](firmware/config/attiny48.h) to get familiar with the required definitions and application considerations.
