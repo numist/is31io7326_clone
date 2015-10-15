@@ -20,3 +20,8 @@
 #define PORT_OD PORTD
 #define DDR_OD DDRD
 #define PIN_OD PIND
+
+#define INT_PIN 7
+#define INT_MASK (1 << INT_PIN)
+#define INIT_INT() (DDRC = DDRC | INT_MASK)
+#define SET_INT(val) (PORTC = ((val) ? (PINC | INT_MASK) : (PINC & ~INT_MASK) ))
