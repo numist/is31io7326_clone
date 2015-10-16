@@ -36,8 +36,7 @@ FUSES      = -U lfuse:w:0xee:m -U hfuse:w:0xdd:m -U efuse:w:0x01:m
 # Tune the lines below only if you know what you are doing:
 
 AVRDUDE = avrdude $(PROGRAMMER) -p $(DEVICE)
-# -flto can be added if necessary, but emits spurious warning: '_vector_19' appears to be a misspelled signal handler [enabled by default]
-COMPILE = avr-gcc -Wall -Wextra -Wno-missing-field-initializers -Werror -Os -std=gnu99 -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)
+COMPILE = avr-gcc -Wall -Wextra -Werror -flto -Os -std=gnu99 -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)
 
 # symbolic targets:
 all:	main.hex
