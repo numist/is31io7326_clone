@@ -105,35 +105,53 @@ static inline void setup(void)
 
 static inline void loop(void)
 {
+    /* TODO: low power mode:
+     *   When all keys reported up:
+     *     DDR_PP = 0x11; PORT_PP = 0x00;
+     *     Guarantee wake on TWI / any PORT_OD pin FALLING
+     *     Sleep
+     */
     for (uint8_t pp = 0; pp < 8; ++pp) {
-        uint8_t bitmask = (1 << pp);
-        DDR_PP = 0x00 ^ bitmask;
-        PORT_PP = 0xFF ^ bitmask;
-        
+        uint8_t pp_bitmask = _BV(pp);
+
         _delay_ms(1);
-        
+
+        DDR_PP = 0x00 ^ pp_bitmask;
+        PORT_PP = 0xFF ^ pp_bitmask;
+
+        _delay_ms(1);
+
+        // Rollover conditions exist if any other scanning pin is pulled low.
+        if ((PIN_PP | pp_bitmask) != 0xFF) {
+            continue;
+        }
+
+        // Read key state into debouncer
         uint8_t changes = debounce(PIN_OD, db + pp);
-        if (changes) {
+        if (changes == 0) {
+            continue;
+        }
+
+        DISABLE_INTERRUPTS({
             twi_handler_unsafe = true;
+            key_t key;
+            key.dataNumber = 0; // Set by I²C code (ringbuf.count != 0)
+            key.pp = pp;
+
             for (int8_t od = 0; od < 8; od++) {
-                if (changes & (1 << od)) {
-                    ringbuf_append(((key_t){
-                        .dataNumber = 0, // Set by I²C slave when ringbuf.count > 0
-                        .keyState = !BIT_IS_SET(db[pp].state, od),
-                        .od = od,
-                        .pp = pp
-                    }).val);
+                if (changes & _BV(od)) {
+                    key.keyState = !(db[pp].state & _BV(od));
+                    key.od = od;
+                    ringbuf_append(key.val);
                 }
             }
 
             SET_INT(0);
             twi_handler_unsafe = false;
-        }
         if (twi_event_pending) {
             twi_handle_event();
         }
-        
-        _delay_ms(1);
+        });
     }
 }
 
