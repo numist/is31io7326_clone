@@ -24,11 +24,10 @@ static inline void setup(void)
 {
     DDR_PP = 0x00;
     PORT_PP = 0xFF;
-    
+
     DDR_OD = 0x00;
     PORT_OD = 0xFF;
 
-    PORT_INT = PIN_INT & ~INT_MASK;
     SET_INT(1);
 
     // TODO: set TWI_Tx_Data_Callback and TWI_Rx_Data_Callback
@@ -71,8 +70,8 @@ static inline void loop(void)
             key.pp = pp;
 
             for (int8_t od = 0; od < 8; od++) {
-                if (changes & _BV(od)) {
-                    key.keyState = !(db[pp].state & _BV(od));
+                if (bit_is_set(changes, od)) {
+                    key.keyState = bit_is_clear(db[pp].state, od);
                     key.od = od;
                     ringbuf_append(key.val);
                 }

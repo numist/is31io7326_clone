@@ -10,12 +10,19 @@
 #endif
 #include "config/validate.h"
 
-#define INT_MASK (1 << PIN_NO_INT)
+#define SET_OUTPUT(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+#define SET_INPUT(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+
+#define HIGH(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+#define LOW(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+
 #define SET_INT(val) do { \
     if (val) { \
-        PORT_INT |= INT_MASK; \
+        SET_INPUT(DDR_INT, PIN_NO_INT); \
+        HIGH(PORT_INT, PIN_NO_INT); \
     } else { \
-        PORT_INT &= ~INT_MASK; \
+        LOW(PORT_INT, PIN_NO_INT); \
+        SET_OUTPUT(DDR_INT, PIN_NO_INT); \
     } \
 } while(0)
 

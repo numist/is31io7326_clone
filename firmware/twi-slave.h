@@ -1,6 +1,6 @@
-/* 
+/*
  * Copyright (c) 2004, Atmel Corporation
- * 
+ *
  * The sourcecode was orginally from Atmel Application Note
  * -- AVR311: TWI Slave Implementation --
  *
@@ -16,7 +16,7 @@
   TWI Status/Control register definitions
 ****************************************************************************/
 
-#define TWI_BUFFER_SIZE 2      // Reserves memory for the drivers transceiver buffer. 
+#define TWI_BUFFER_SIZE 2      // Reserves memory for the drivers transceiver buffer.
 
 /****************************************************************************
   Callback definitions
