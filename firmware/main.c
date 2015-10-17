@@ -18,8 +18,6 @@ debounce_t db[] = {
     {0x00, 0x00, 0xFF}
 };
 
-unsigned char messageBuf[TWI_BUFFER_SIZE];
-
 static inline void setup(void)
 {
     DDR_PP = 0x00;
