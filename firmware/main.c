@@ -44,12 +44,12 @@ static inline void loop(void)
     for (uint8_t pp = 0; pp < 8; ++pp) {
         uint8_t pp_bitmask = _BV(pp);
 
-        _delay_ms(1);
+        _delay_ms(0.5);
 
         DDR_PP = 0x00 ^ pp_bitmask;
         PORT_PP = 0xFF ^ pp_bitmask;
 
-        _delay_ms(1);
+        _delay_ms(0.5);
 
         uint8_t od_bits = PIN_OD;
         /*
