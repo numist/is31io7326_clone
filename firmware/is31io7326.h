@@ -17,20 +17,20 @@ typedef union {
 // Configuration register
 extern uint8_t issi_config;
 
-/* Auto Clear INT
+/* ACI: Auto Clear INT
  * 00: Auto clear INT disabled
  * 01: Auto clear INT in 5ms
  * 10: Auto clear INT in 10ms
  */
 #define ISSI_CONFIG_ACI(CFG) (((CFG) >> 5) & 0x03)
 
-/* Input Port Filter Enable
+/* DE: Input Port Filter Enable
  * 0: Input port filter disable
  * 1: Input port filter enable
  */
 #define ISSI_CONFIG_DE(CFG)  (((CFG) >> 4) & 0x01)
 
-/* Key Scan Debounce Time
+/* SD: Key Scan Debounce Time
  * 0: Double debounce time (6ms, 8ms), 14ms total
  * 1: Normal debounce time (3ms, 4ms), 7ms total
  */
