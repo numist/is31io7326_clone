@@ -20,7 +20,7 @@ bool ringbuf_empty(void)
 
 uint8_t ringbuf_pop(void)
 {
-    if (_ring.count == 0) {
+    if (__builtin_expect(_ring.count == 0, 0)) {
         return 0;
     }
     

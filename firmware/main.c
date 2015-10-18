@@ -51,14 +51,23 @@ static inline void loop(void)
 
         _delay_ms(1);
 
-        // Rollover conditions exist if any other scanning pin is pulled low.
-        if ((PIN_PP | pp_bitmask) != 0xFF) {
+        uint8_t od_bits = PIN_OD;
+        /*
+         * Rollover conditions exist if:
+         *  * Multiple OD pins are pulled low AND
+         *  * Multiple PP pins are pulled low
+         */
+        bool nPp = __builtin_popcount(~PIN_PP);
+        bool nOd = __builtin_popcount(~od_bits);
+        // Most of the time the keyboard will not be a rollover state
+        if (__builtin_expect(nPp != 1 && nOd != 1, 0)) {
             continue;
         }
 
-        // Read key state into debouncer
-        uint8_t changes = debounce(PIN_OD, db + pp);
-        if (changes == 0) {
+        // Debounce key state
+        uint8_t changes = debounce(od_bits, db + pp);
+        // Most of the time there will be no new key events
+        if (__builtin_expect(changes == 0, 1)) {
             continue;
         }
 
@@ -68,7 +77,8 @@ static inline void loop(void)
             key.pp = pp;
 
             for (int8_t od = 0; od < 8; od++) {
-                if (bit_is_set(changes, od)) {
+                // Fewer than half the keys are expected to be down for each scanline
+                if (__builtin_expect(bit_is_set(changes, od), 0)) {
                     key.keyState = bit_is_clear(db[pp].state, od);
                     key.od = od;
                     ringbuf_append(key.val);
