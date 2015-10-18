@@ -1,6 +1,6 @@
 #pragma once
 
-#define TWI_BASE_ADDRESS     (0x58 >> 1)
+#define TWI_BASE_ADDRESS     0x58
 
 typedef union {
     struct {

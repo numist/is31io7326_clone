@@ -69,8 +69,8 @@ void TWI_Slave_Initialise( unsigned char TWI_ownAddress )
   TWAR = TWI_ownAddress << 1; // Set own TWI slave address. Reject TWI General Calls.
 
   TWDR = 0xFF;                // Default content = SDA released.
-  HIGH(TWSR, TWPS0);
-  HIGH(TWSR, TWPS1);
+  LOW(TWSR, TWPS0);
+  LOW(TWSR, TWPS1);
   TWI_Start_Transceiver(1);
 }
 
