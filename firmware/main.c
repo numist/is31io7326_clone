@@ -101,7 +101,6 @@ int main(void)
     setup();
     while(1){
         loop();
-        SET_INT(1);
     }
     __builtin_unreachable();
 }
@@ -134,6 +133,9 @@ void twi_data_requested(uint8_t *buf, uint8_t *bufsiz) {
             } else {
                 buf[0] = ringbuf_pop();
                 *bufsiz = 1;
+                if (ringbuf_empty()) {
+                    SET_INT(1);
+                }
             }
         }
     }
