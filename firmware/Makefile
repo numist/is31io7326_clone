@@ -27,7 +27,7 @@ CLOCK      = 8000000
 # PROGRAMMER = -c dragon_isp -P usb
 
 # Add more objects for each .c file here
-OBJECTS    = main.o twi-slave.o ringbuf.o
+OBJECTS    = main.o twi-slave.o ringbuf.o is31io7326.o keyscanner.o
 
 # For computing fuse byte values for other devices and options see
 # the fuse bit calculator at http://www.engbedded.com/fusecalc/
