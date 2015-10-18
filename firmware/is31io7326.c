@@ -24,6 +24,7 @@ void issi_twi_data_received(uint8_t *buf, uint8_t bufsiz) {
         if (buf[0] == 0x08 && bufsiz > 1) {
             // SET configuration
             issi_config = buf[1];
+            SET_INT(1);
         } else {
             // GET configuration
             issi_twi_command = buf[0];
