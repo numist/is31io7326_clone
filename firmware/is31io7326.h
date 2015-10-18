@@ -4,10 +4,10 @@
 
 typedef union {
     struct {
-        uint8_t dataNumber:1,
+        uint8_t od:3,
+                pp:3,
                 keyState:1,
-                od:3,
-                pp:3;
+                dataNumber:1;
     };
     uint8_t val;
 } key_t;

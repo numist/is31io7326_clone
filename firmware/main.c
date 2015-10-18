@@ -18,6 +18,9 @@ debounce_t db[] = {
     {0x00, 0x00, 0xFF}
 };
 
+void twi_data_received( uint8_t *buf, uint8_t bufsiz);
+void twi_data_requested( uint8_t *buf, uint8_t *bufsiz);
+
 static inline void setup(void)
 {
     DDR_PP = 0x00;
@@ -27,6 +30,9 @@ static inline void setup(void)
     PORT_OD = 0xFF;
 
     SET_INT(1);
+
+    TWI_Rx_Data_Callback = twi_data_received;
+    TWI_Tx_Data_Callback = twi_data_requested;
 
     // TODO: set TWI_Tx_Data_Callback and TWI_Rx_Data_Callback
     TWI_Slave_Initialise(TWI_BASE_ADDRESS | AD01());
@@ -98,4 +104,37 @@ int main(void)
         SET_INT(1);
     }
     __builtin_unreachable();
+}
+
+uint8_t twi_command = 0;
+uint8_t issi_config = 0x10;
+
+void twi_data_received(uint8_t *buf, uint8_t bufsiz) {
+    if (__builtin_expect(bufsiz != 0, 1)) {
+        if (buf[0] == 0x08 && bufsiz > 1) {
+            // SET configuration
+            issi_config = buf[1];
+        } else {
+            // GET configuration
+            twi_command = buf[0];
+        }
+    }
+}
+
+void twi_data_requested(uint8_t *buf, uint8_t *bufsiz) {
+    if (__builtin_expect(*bufsiz != 0, 1)) {
+        if (twi_command == 0x08) {
+            // Configuration Register
+            buf[0] = issi_config;
+            *bufsiz = 1;
+        } else if (twi_command == 0x10) {
+            // Key Status Register
+            if (ringbuf_empty()) {
+                *bufsiz = 0;
+            } else {
+                buf[0] = ringbuf_pop();
+                *bufsiz = 1;
+            }
+        }
+    }
 }
