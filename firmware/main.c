@@ -131,11 +131,16 @@ void twi_data_requested(uint8_t *buf, uint8_t *bufsiz) {
             if (ringbuf_empty()) {
                 *bufsiz = 0;
             } else {
-                buf[0] = ringbuf_pop();
-                *bufsiz = 1;
+                key_t key;
+                key.val = ringbuf_pop();
                 if (ringbuf_empty()) {
+                    key.dataNumber = 0;
                     SET_INT(1);
+                } else {
+                    key.dataNumber = 1;
                 }
+                buf[0] = key.val;
+                *bufsiz = 1;
             }
         }
     }
