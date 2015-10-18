@@ -24,6 +24,14 @@ void keyscanner_init(void)
     PORT_OD = 0xFF;
 }
 
+static inline uint8_t popCount(uint8_t val) {
+    uint8_t count;
+    for (count=0; val; count++) {
+        val &= val-1;
+    }
+    return count;
+}
+
 void keyscanner_main(void)
 {
     /* TODO: low power mode:
@@ -48,10 +56,10 @@ void keyscanner_main(void)
          *  * Multiple OD pins are pulled low AND
          *  * Multiple PP pins are pulled low
          */
-        bool nPp = __builtin_popcount(~PIN_PP);
-        bool nOd = __builtin_popcount(~od_bits);
+        uint8_t nPp = popCount(~PIN_PP);
+        uint8_t nOd = popCount(~od_bits);
         // Most of the time the keyboard will not be a rollover state
-        if (__builtin_expect(nPp != 1 && nOd != 1, 0)) {
+        if (__builtin_expect(nPp > 1 && nOd > 1, 0)) {
             continue;
         }
 
