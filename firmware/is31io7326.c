@@ -4,6 +4,7 @@
 #include "twi-slave.h"
 
 uint8_t issi_config = 0x10;
+key_t key0 = { .val = 0 };
 
 void issi_init(void)
 {
@@ -42,10 +43,15 @@ void issi_twi_data_requested(uint8_t *buf, uint8_t *bufsiz) {
             // Key Status Register
             key_t key;
             if (ringbuf_empty()) {
-                // TODO: keyState needs to be set based on whether key 0 is already down
-                key.val = 0;
+                key.val = key0.val;
             } else {
                 key.val = ringbuf_pop();
+
+                // Update the stored key0 state if it has changed
+                if (key.pp == 0 && key.od == 0) {
+                    key0.val = key.val;
+                }
+
                 if (ringbuf_empty()) {
                     SET_INT(1);
                 } else {
