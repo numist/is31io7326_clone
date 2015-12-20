@@ -40,20 +40,20 @@ void issi_twi_data_requested(uint8_t *buf, uint8_t *bufsiz) {
             *bufsiz = 1;
         } else if (issi_twi_command == 0x10) {
             // Key Status Register
+            key_t key;
             if (ringbuf_empty()) {
-                *bufsiz = 0;
+                // TODO: keyState needs to be set based on whether key 0 is already down
+                key.val = 0;
             } else {
-                key_t key;
                 key.val = ringbuf_pop();
                 if (ringbuf_empty()) {
-                    key.dataNumber = 0;
                     SET_INT(1);
                 } else {
                     key.dataNumber = 1;
                 }
-                buf[0] = key.val;
-                *bufsiz = 1;
             }
+            buf[0] = key.val;
+            *bufsiz = 1;
         }
     }
 }
