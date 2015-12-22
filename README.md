@@ -5,10 +5,10 @@ Key reporting and rollover detection are tested and working, all options in the 
 
 ## Getting started:
 
-1. Install an avr toolchain (if you're on OS X, try [CrossPack for AVR®](https://www.obdev.at/products/crosspack/))
+1. Install an avr toolchain (if you're on OS X, use [`brew`](http://brew.sh) to install `avr-libc` from [osx-cross](https://github.com/osx-cross/homebrew-avr)).
 2. `cd firmware`
 3. `make`
-4. `make flash` and `make fuse` as necessary to program your MCU
+4. `make flash` and `make fuse` as necessary to program your MCU (you'll need `avrdude` for this, `brew` has it)
 
 ### Common issues:
 
